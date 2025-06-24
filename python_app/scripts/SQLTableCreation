@@ -1,0 +1,23 @@
+CREATE TABLE BooksEnriched (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    Title NVARCHAR(MAX),
+    Author NVARCHAR(255),
+    First_Publish_Year INT,
+    ISBN VARCHAR(20),
+    OpenLibrary_ID VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE dbo.Books (
+    Id INT PRIMARY KEY,
+    Title NVARCHAR(255),
+    BookCheckout DATE,
+    BookReturned DATE,
+    DaysAllowed NVARCHAR(50),
+    CustomerID INT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES dbo.Customers(CustomerID)
+);
+
+CREATE TABLE dbo.Customers (
+    CustomerID INT PRIMARY KEY,
+    CustomerName NVARCHAR(255) NOT NULL
+);
