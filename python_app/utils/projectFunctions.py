@@ -42,9 +42,6 @@ def fix_swapped_dates(df: pd.DataFrame, checkout_col: str = 'Book checkout', ret
 
     return df
 
-
-import pandas as pd
-
 def fix_swapped_and_future_dates(
     df: pd.DataFrame,
     checkout_col: str = 'Book checkout',
@@ -78,6 +75,51 @@ def fix_swapped_and_future_dates(
     return df
 
 
+import pandas as pd
+from datetime import datetime
+
+def add_borrow_duration_and_alert(
+    df: pd.DataFrame,
+    checkout_col: str = 'Book checkout',
+    returned_col: str = 'Book Returned',
+    max_allowed_days: int = 14
+) -> pd.DataFrame:
+    """
+    Adds a column for number of days borrowed and an alert:
+    'ON TIME', 'OVERDUE', or 'SCHEDULED' for future due dates.
+    """
+    today = pd.Timestamp(datetime.now().date())
+
+    # Ensure datetime format
+    df[checkout_col] = pd.to_datetime(df[checkout_col], errors='coerce')
+    df[returned_col] = pd.to_datetime(df[returned_col], errors='coerce')
+
+    def calculate_duration(row):
+        if pd.notna(row[returned_col]) and pd.notna(row[checkout_col]):
+            return (row[returned_col] - row[checkout_col]).days
+        elif pd.isna(row[returned_col]) and pd.notna(row[checkout_col]):
+            return (today - row[checkout_col]).days
+        else:
+            return None
+
+    def alert_status(row):
+        duration = row['BorrowDuration']
+        returned = row[returned_col]
+
+        if pd.isna(returned):
+            if duration is not None and duration > max_allowed_days:
+                return 'OVERDUE'
+            else:
+                return 'SCHEDULED'
+        else:
+            return 'OVERDUE' if duration > max_allowed_days else 'ON TIME'
+
+    # Add duration and alert columns
+    df['BorrowDuration'] = df.apply(calculate_duration, axis=1)
+    df['OverdueAlert'] = df.apply(alert_status, axis=1)
+
+    return df
+
 # Function to clean data (combines dropna, drop duplicates, and correct dates if applicable)
 def clean_data(file_path: str, date_columns: list = [], output_file: str = "") -> pd.DataFrame:
     # Step 1: Read in the raw data
@@ -109,8 +151,12 @@ def clean_data(file_path: str, date_columns: list = [], output_file: str = "") -
     # Step 6: Correct incorrect dates in the data
     if 'Book checkout' in df_no_duplicates.columns and 'Book Returned' in df_no_duplicates.columns:
         df_no_duplicates = fix_swapped_and_future_dates(df_no_duplicates)
+
+    # Step 7: Count the days customer holds the book and give an alert if it's longer than 14 days 
+    if 'Book checkout' in df_no_duplicates.columns and 'Book Returned' in df_no_duplicates.columns:
+        df_no_duplicates = add_borrow_duration_and_alert(df_no_duplicates)
     
-    # Step 6: Save the cleaned data if output file path is provided
+    # Step 8: Save the cleaned data if output file path is provided
     if output_file:
         save_to_csv(df_no_duplicates, output_file)
 
