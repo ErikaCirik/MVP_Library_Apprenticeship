@@ -10,4 +10,4 @@ COPY . /app
 RUN pip install -r requirements.txt
 
 # Running the application
-ENTRYPOINT ["python","test.py"]
+ENTRYPOINT ["python","testDocker.py"]
