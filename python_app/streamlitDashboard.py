@@ -37,4 +37,4 @@ if "BorrowDuration" in books.columns:
     st.write("Borrow Duration Distribution")
     st.bar_chart(books["BorrowDuration"].dropna())
 
-#to run: streamlit run streamlitDashboard.py --server.port 8502
+#to run: python -m streamlit run streamlitDashboard.py --server.port 8502
