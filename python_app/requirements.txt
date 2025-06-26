@@ -1,0 +1,6 @@
+argparse
+pandas
+requests
+sqlalchemy
+datetime
+urllib
