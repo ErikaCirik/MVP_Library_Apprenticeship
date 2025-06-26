@@ -23,8 +23,9 @@ st.metric("Number of Books", get_num_books(books))
 st.metric("Number of API Requests", get_num_api_requests(api_books))
 
 # Example: Bar chart of top 5 most borrowed books
+st.subheader("Top 5 Most Borrowed Books")
 top_books = books["Books"].value_counts().head(5)
-st.bar_chart(top_books)
+st.bar_chart(top_books.rename_axis("Book Title").rename("Number of Borrows"))
 
 # Example: Pie chart of overdue vs on time
 if "OverdueAlert" in books.columns:
