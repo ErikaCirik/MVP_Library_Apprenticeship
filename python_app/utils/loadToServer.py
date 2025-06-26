@@ -1,8 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
-import urllib
-
+import pyodbc
 
 def write_df_to_sql(
     df: pd.DataFrame,
