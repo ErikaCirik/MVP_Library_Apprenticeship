@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 # Function to read a CSV file
 def read_csv(file_path: str) -> pd.DataFrame:
@@ -68,15 +69,16 @@ def fix_swapped_and_future_dates(
         checkout_date = row[checkout_col]
         returned_date = row[returned_col]
         # Set returned date to the same year as checkout
-        return returned_date.replace(year=checkout_date.year)
+        if pd.notna(returned_date) and pd.notna(checkout_date):
+            return returned_date.replace(year=checkout_date.year)
+        return returned_date
 
-    df.loc[mask_future, returned_col] = df.loc[mask_future].apply(correct_year, axis=1)
+    # Apply correction directly to the rows identified by mask_future
+    df.loc[mask_future, returned_col] = df.loc[mask_future].apply(
+        lambda row: correct_year(row), axis=1
+    )
 
     return df
-
-
-import pandas as pd
-from datetime import datetime
 
 def add_borrow_duration_and_alert(
     df: pd.DataFrame,
@@ -88,7 +90,7 @@ def add_borrow_duration_and_alert(
     Adds a column for number of days borrowed and an alert:
     'ON TIME', 'OVERDUE', or 'SCHEDULED' for future due dates.
     """
-    today = pd.Timestamp(datetime.now().date())
+    today = pd.to_datetime(datetime.now().date())
 
     # Ensure datetime format
     df[checkout_col] = pd.to_datetime(df[checkout_col], errors='coerce')

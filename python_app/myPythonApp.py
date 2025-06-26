@@ -10,36 +10,35 @@ args = parser.parse_args()
 
 # --- Clean Customer Data ---
 customer_cleaned = projectFunctions.clean_data(
-    "C:/Users/Admin/MVP_Library_Apprenticeship/python_app/raw_data/03_Library SystemCustomers.csv",
-    output_file="output/customerCleanedPy.csv"
+    "./raw_data/03_Library SystemCustomers.csv",
+    output_file="./output/customerCleanedPy.csv"
 )
 print("✅ Customer data cleansed.")
 
 # --- Clean Book Data (with date correction) ---
 book_cleaned = projectFunctions.clean_data(
-    "C:/Users/Admin/MVP_Library_Apprenticeship/python_app/raw_data/03_Library Systembook.csv",
+    "./raw_data/03_Library Systembook.csv",
     date_columns=['Book checkout', 'Book Returned'],
-    output_file="output/bookCleanedPy.csv"
+    output_file="./output/bookCleanedPy.csv"
 )
 print("✅ Book data cleansed.")
 
 # --- Clean Books Enhanced API Information ---
 # Enrich with Open Library API
 df_enriched = enrich_books(book_cleaned)
-df_enriched.to_csv("raw_data/bookEnrichedWithAPI.csv", index=False)
+df_enriched.to_csv("./raw_data/bookEnrichedWithAPI.csv", index=False)
 print("✅ Book data enriched.")
 
 book_api = projectFunctions.clean_data(
-    "C:/Users/Admin/MVP_Library_Apprenticeship/python_app/raw_data/bookEnrichedWithAPI.csv",
-    output_file="output/bookEnrichedAPICleanedPy.csv"
+    "./raw_data/bookEnrichedWithAPI.csv",
+    output_file="./output/bookEnrichedAPICleanedPy.csv"
 )
 print("✅ Book Enriched data cleansed.")
 
-
 # --- Load Cleaned CSVs ---
-df_customer = pd.read_csv('C:/Users/Admin/MVP_Library_Apprenticeship/Python_app/output/customerCleanedPy.csv')
-df_book = pd.read_csv('C:/Users/Admin/MVP_Library_Apprenticeship/Python_app/output/bookCleanedPy.csv')
-df_bookEnriched = pd.read_csv('C:/Users/Admin/MVP_Library_Apprenticeship/Python_app/output/bookEnrichedAPICleanedPy.csv')
+df_customer = pd.read_csv('./output/customerCleanedPy.csv')
+df_book = pd.read_csv('./output/bookCleanedPy.csv')
+df_bookEnriched = pd.read_csv('./output/bookEnrichedAPICleanedPy.csv')
 print("✅ All cleansed CSVs loaded.")
 
 # --- Optional SQL Write ---
