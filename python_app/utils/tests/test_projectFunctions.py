@@ -2,7 +2,13 @@ from datetime import datetime
 import unittest
 from unittest.mock import patch
 import pandas as pd
-from projectFunctions import read_csv, clean_data, add_borrow_duration_and_alert, drop_na, drop_duplicates, correct_dates, save_to_csv, fix_swapped_dates, fix_swapped_and_future_dates
+import sys
+import os
+
+# Add the parent directory of python_app to sys.path for absolute imports
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from utils.projectFunctions import read_csv, clean_data, add_borrow_duration_and_alert, drop_na, drop_duplicates, correct_dates, save_to_csv, fix_swapped_dates, fix_swapped_and_future_dates
 
 class TestProjectFunctions(unittest.TestCase):
     @patch('pandas.read_csv')
@@ -113,8 +119,8 @@ class TestProjectFunctions(unittest.TestCase):
             self.assertEqual(result.loc[2, 'OverdueAlert'], 'SCHEDULED')
         self.assertEqual(result.loc[3, 'OverdueAlert'], 'ON TIME')  # Returned within 14 days
 
-    @patch('projectFunctions.read_csv')
-    @patch('projectFunctions.save_to_csv')
+    @patch('utils.projectFunctions.read_csv')
+    @patch('utils.projectFunctions.save_to_csv')
     def test_clean_data(self, mock_save_to_csv, mock_read_csv):
         # Arrange
         mock_df = pd.DataFrame({

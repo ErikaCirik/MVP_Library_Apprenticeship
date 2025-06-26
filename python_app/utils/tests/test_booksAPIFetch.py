@@ -1,10 +1,16 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from booksAPIFetch import fetch_openlibrary_data
+import sys
+import os
+
+# Add the parent directory of the project (python_app) to sys.path for absolute imports
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from utils.booksAPIFetch import fetch_openlibrary_data
 
 
 class TestFetchOpenLibraryData(unittest.TestCase):
-    @patch('booksAPIFetch.requests.get')
+    @patch('utils.booksAPIFetch.requests.get')
     def test_fetch_openlibrary_data_success(self, mock_get):
         # Mock a successful API response
         mock_response = MagicMock()
@@ -36,7 +42,7 @@ class TestFetchOpenLibraryData(unittest.TestCase):
         })
         mock_get.assert_called_once_with("https://openlibrary.org/search.json?title=Test Book")
 
-    @patch('booksAPIFetch.requests.get')
+    @patch('utils.booksAPIFetch.requests.get')
     def test_fetch_openlibrary_data_no_results(self, mock_get):
         # Mock an API response with no results
         mock_response = MagicMock()
@@ -54,7 +60,7 @@ class TestFetchOpenLibraryData(unittest.TestCase):
         self.assertIsNone(result)
         mock_get.assert_called_once_with("https://openlibrary.org/search.json?title=Nonexistent Book")
 
-    @patch('booksAPIFetch.requests.get')
+    @patch('utils.booksAPIFetch.requests.get')
     def test_fetch_openlibrary_data_error_handling(self, mock_get):
         # Mock an exception during the API call
         mock_get.side_effect = Exception("API error")
