@@ -26,4 +26,5 @@ jobs:
 
     - name: Run tests
       run: |
-        python -m python_app/unittest discover -s tests
+        python -m python_app/utils discover -s tests
+        python -m python_app discover -s tests
