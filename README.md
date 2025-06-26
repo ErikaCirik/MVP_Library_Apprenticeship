@@ -59,6 +59,7 @@ Covered:
 
 
 Kanban Board [how it looked initially]:
+
 ![KanbanBoard](https://github.com/user-attachments/assets/8c54b2c5-2b21-4e79-a85e-d57135ad1de1)
 
 Architecture[high level view of architecture]:
