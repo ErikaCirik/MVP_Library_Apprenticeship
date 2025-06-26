@@ -11,23 +11,23 @@ Day 1 Task:
 - Stretch: Look intot the SQLALCHEMY library and try to get python to write the cleaned files to a local SQL Server. #
 
 Day 2:
--Create a .py file based on your work yesterday to CLEAN and OUTPUT the library datasets.
--You must include functions like the following:
-  -fileLoader
-  -duplicateChecker
-  -naChecker
-  -dataEnrich
--PM: Tasks
-Make sure you have a function that calculates the difference between the time the books were on loan to when they were checked out.
--Stretch Tasks:
-Use the Argparse library to toggle the writing to SQL on and off.
-Using APIs:
-Find an open API and write a new pyton script that requests data from an API and prints it.
-List of APIs: https://github.com/public-api-lists/public-api-lists
+- Create a .py file based on your work yesterday to CLEAN and OUTPUT the library datasets.
+- You must include functions like the following:
+  - fileLoader
+  - duplicateChecker
+  - naChecker
+  - dataEnrich
+- PM: Tasks
+  Make sure you have a function that calculates the difference between the time the books were on loan to when they were checked out.
+- Stretch Tasks:
+  Use the Argparse library to toggle the writing to SQL on and off.
+  Using APIs:
+  Find an open API and write a new pyton script that requests data from an API and prints it.
+  List of APIs: https://github.com/public-api-lists/public-api-lists
 
 Day 4 AM Task:
--Write a unit test for your python app (For the data enrichment where you calculate the number of days on loan).
--Put your data cleaning app as a docker image, run it and show me that it works.
+- Write a unit test for your python app (For the data enrichment where you calculate the number of days on loan).
+- Put your data cleaning app as a docker image, run it and show me that it works.
 
 References:
 assertEqual(a, b) a == b
