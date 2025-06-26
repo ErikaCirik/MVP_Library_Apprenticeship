@@ -21,3 +21,11 @@ CREATE TABLE dbo.Customers (
     CustomerID INT PRIMARY KEY,
     CustomerName NVARCHAR(255) NOT NULL
 );
+
+CREATE TABLE Metrics (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    num_customers INT NOT NULL,
+    num_books INT NOT NULL,
+    num_api_requests INT NOT NULL,
+    created_at DATETIME DEFAULT GETDATE()
+);

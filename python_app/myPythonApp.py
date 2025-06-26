@@ -2,6 +2,7 @@ import argparse
 import pandas as pd
 from utils.booksAPIFetch import enrich_books
 import utils.projectFunctions as projectFunctions
+from utils.DE_metrics import get_num_customers, get_num_books, get_num_api_requests
 
 # Set up command-line arguments
 parser = argparse.ArgumentParser(description="Clean library data and optionally write to SQL Server.")
@@ -41,12 +42,25 @@ df_book = pd.read_csv('./output/bookCleanedPy.csv')
 df_bookEnriched = pd.read_csv('./output/bookEnrichedAPICleanedPy.csv')
 print("✅ All cleansed CSVs loaded.")
 
+# --- Metrics Calculation ---
+num_customers = get_num_customers(df_customer)
+num_books = get_num_books(df_book)
+num_api_requests = get_num_api_requests(df_bookEnriched)
+
+metrics_df = pd.DataFrame([{
+    "num_customers": num_customers,
+    "num_books": num_books,
+    "num_api_requests": num_api_requests
+}])
+print(f"📊 Metrics: Customers={num_customers}, Books={num_books}, API Requests={num_api_requests}")
+
 # --- Optional SQL Write ---
 if args.write_to_sql:
     from utils.loadToServer import write_df_to_sql
     write_df_to_sql(df_book, table_name='Books', database='MVP_Library')
     write_df_to_sql(df_customer, table_name='Customers', database='MVP_Library')
     write_df_to_sql(df_bookEnriched, table_name='BooksEnriched', database='MVP_Library')
+    write_df_to_sql(metrics_df, table_name='Metrics', database='MVP_Library')
     print("✅ Data written to SQL Server.")
 else:
     print("⚠️ SQL write skipped. Use --write-to-sql to enable.")
