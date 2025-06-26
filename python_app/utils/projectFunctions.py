@@ -71,12 +71,12 @@ def fix_swapped_and_future_dates(
         # Set returned date to the same year as checkout
         if pd.notna(returned_date) and pd.notna(checkout_date):
             return returned_date.replace(year=checkout_date.year)
-        return returned_date
+        return pd.NaT
 
-    # Apply correction directly to the rows identified by mask_future
-    df.loc[mask_future, returned_col] = df.loc[mask_future].apply(
-        lambda row: correct_year(row), axis=1
-    )
+    # Apply correction and ensure dtype compatibility
+    corrected = df.loc[mask_future].apply(lambda row: correct_year(row), axis=1)
+    corrected = pd.to_datetime(corrected)
+    df.loc[mask_future, returned_col] = corrected
 
     return df
 
