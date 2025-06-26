@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import sys
 import os
+import matplotlib.pyplot as plt
 
 # Add the parent directory of the project to sys.path so 'utils' can be imported
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
@@ -21,4 +22,18 @@ st.metric("Number of Customers", get_num_customers(customers))
 st.metric("Number of Books", get_num_books(books))
 st.metric("Number of API Requests", get_num_api_requests(api_books))
 
-#to run: python -m streamlit run streamlitDashboard.py
+# Example: Bar chart of top 5 most borrowed books
+top_books = books["Books"].value_counts().head(5)
+st.bar_chart(top_books)
+
+# Example: Pie chart of overdue vs on time
+if "OverdueAlert" in books.columns:
+    st.write("Overdue vs On Time Returns")
+    st.pyplot(books["OverdueAlert"].value_counts().plot.pie(autopct='%1.1f%%', figsize=(4,4)).get_figure())
+
+# Example: Histogram of borrow durations
+if "BorrowDuration" in books.columns:
+    st.write("Borrow Duration Distribution")
+    st.bar_chart(books["BorrowDuration"].dropna())
+
+#to run: streamlit run streamlitDashboard.py --server.port 8502
